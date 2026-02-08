@@ -120,7 +120,7 @@ export default function QuestionPage() {
                   : "Laptop/Desktop";
 
                 // Pre-filled message (customize freely)
-                const text = `Hi 😄 I clicked "now call me" from the Valentine website 💗 (Device: ${deviceLabel})`;
+                const text = `Mau mau Yongki Natalia mau jadi valentine kmu 😘😍`;
                 const encodedText = encodeURIComponent(text);
 
                 // Different treatment:

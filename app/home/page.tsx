@@ -27,6 +27,7 @@ export default function HomePage() {
         <div className="pageLinks">
           <Link className="linkBtn" href="/love-letter">💌 Love Letter</Link>
           <Link className="linkBtn" href="/reasons">🌸 Reasons</Link>
+          <Link className="linkBtn" href="/gallery-of-love">📸 Gallery of You</Link>
           <Link className="linkBtn" href="/question">💘 The Question</Link>
         </div>
 

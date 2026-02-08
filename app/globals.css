@@ -290,3 +290,59 @@ body{
   font-weight: 800;
   color: rgba(255,90,138,.75);
 }
+/* ===== Gallery of Love ===== */
+.loveGallery{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+@media (min-width: 640px){
+  .loveGallery{
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+}
+
+@media (min-width: 1024px){
+  .loveGallery{
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+.loveTile{
+  margin: 0;
+  background: rgba(255,255,255,.70);
+  border: 2px solid rgba(255,90,138,.14);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 10px 22px rgba(0,0,0,.06);
+}
+
+.loveImgWrap{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5; /* nice portrait vibe */
+  overflow: hidden;
+}
+
+.loveCaption{
+  padding: 10px 12px;
+  color: rgba(255,90,138,.95);
+  font-weight: 900;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* subtle hover (desktop) */
+@media (hover:hover){
+  .loveTile{
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .loveTile:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 16px 30px rgba(0,0,0,.08);
+  }
+}
