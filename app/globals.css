@@ -1,26 +1,292 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+:root{
+  --pink:#ffd3f0;
+  --pink2:#ffc0e6;
+  --text:#ff5a8a;
+  --btnBlue:#9fd2ff;
+  --btnRed:#ff6b6b;
+  --white:#fff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; height:100%; }
+
+body{
+  background: var(--pink);
+  font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Arial;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ===== Login Page ===== */
+.loginWrap{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+
+.loginCard{
+  width:min(900px, 94vw);
+  min-height: 520px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  padding:40px 26px;
+}
+
+.title{
+  margin:0;
+  font-size: clamp(34px, 5vw, 64px);
+  color: var(--text);
+  letter-spacing: .5px;
+  text-align:center;
+  font-weight: 900;
+}
+
+.heart{ margin-left: 8px; }
+
+.kittyWrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin: 8px 0 4px;
+}
+
+.fieldWrap{
+  width:min(420px, 92vw);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:center;
+}
+
+.label{
+  font-size: 14px;
+  color: rgba(255,90,138,.9);
+  font-weight: 700;
+}
+
+.input{
+  width:100%;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 2px solid rgba(255,90,138,.2);
+  background: rgba(255,255,255,.75);
+  outline:none;
+  font-size: 16px;
+}
+
+.hint{
+  font-size: 13px;
+  color: rgba(255,90,138,.75);
+}
+
+.error{
+  width:100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.75);
+  border: 2px dashed rgba(255,90,138,.35);
+  color: rgba(255,90,138,.95);
+  font-weight: 700;
+  text-align:center;
+}
+
+.actions{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  justify-content:center;
+  margin-top: 6px;
+}
+
+.btnYes{
+  border:none;
+  cursor:pointer;
+  padding: 18px 46px;
+  border-radius: 22px;
+  background: var(--btnBlue);
+  color: white;
+  font-weight: 900;
+  font-size: 28px;
+}
+
+.btnNo{
+  border:none;
+  cursor:pointer;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: var(--btnRed);
+  color: white;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.footer{
+  margin-top: 26px;
+  color: rgba(255,90,138,.85);
+  font-weight: 800;
+  font-size: 18px;
+}
+
+/* ===== Inside Pages ===== */
+.container{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+
+.pageCard{
+  width:min(760px, 94vw);
+  background: rgba(255,255,255,.65);
+  border: 2px solid rgba(255,90,138,.18);
+  border-radius: 26px;
+  padding: 28px 22px;
+}
+
+.pageCard.center{ text-align:center; }
+
+.pageTitle{
+  margin:0 0 10px;
+  color: var(--text);
+  font-size: 36px;
+  font-weight: 900;
+}
+
+.pageText{
+  margin:0;
+  color: rgba(255,90,138,.95);
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+.pageLinks{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top: 16px;
+}
+
+.linkBtn{
+  display:inline-block;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.8);
+  border: 2px solid rgba(255,90,138,.18);
+  color: rgba(255,90,138,.95);
+  font-weight: 900;
+  text-decoration:none;
+}
+
+.linkBtn.ghost{
+  margin-top: 14px;
+  background: transparent;
+}
+
+.reasons{
+  margin: 10px 0 0;
+  padding-left: 0;
+  list-style: none;
+  display:grid;
+  gap:10px;
+}
+
+.reasonItem{
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.7);
+  border: 2px solid rgba(255,90,138,.14);
+  color: rgba(255,90,138,.95);
+  font-weight: 800;
+}
+
+.successBox{
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.75);
+  border: 2px solid rgba(255,90,138,.22);
+  color: rgba(255,90,138,.95);
+  font-weight: 900;
+}
+.callMeLink{
+  display: inline-block;
+  margin-top: 10px;
+  font-weight: 900;
+  font-size: 18px;
+  color: #2f80ff; /* soft romantic blue */
+  text-decoration: none;
+  animation: bounceSoft 1.2s infinite;
+  cursor: pointer;
+}
+
+.callMeLink:hover{
+  text-decoration: underline;
+}
+
+@keyframes bounceSoft {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+/* ===== Heart confetti ===== */
+.heartConfetti{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.heartConfettiItem{
+  position: absolute;
+  top: -24px;
+  animation-name: heartFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes heartFall{
+  0%{
+    transform: translateY(-10vh) translateX(0);
+  }
+  100%{
+    transform: translateY(120vh) translateX(30px);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Ensure content stays above confetti */
+.loginWrap, .container { position: relative; z-index: 1; }
+
+/* ===== Music controls ===== */
+.musicRow{
+  margin-top: 10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.musicBtn{
+  border: 2px solid rgba(255,90,138,.18);
+  background: rgba(255,255,255,.75);
+  color: rgba(255,90,138,.95);
+  font-weight: 900;
+  padding: 10px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.musicHint{
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(255,90,138,.75);
 }

@@ -1,65 +1,145 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
+import HeartConfetti from "../components/HeartConfetti";
+
+export default function LoginPage() {
+  const router = useRouter();
+
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const [musicOn, setMusicOn] = useState(false);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const startedOnceRef = useRef(false);
+
+  const hint = useMemo(() => "Hint: starts with “Na” 💗", []);
+
+  useEffect(() => {
+    // Create audio once on client
+    audioRef.current = new Audio("/soft-lofi.mp3");
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.35;
+
+    return () => {
+      audioRef.current?.pause();
+      audioRef.current = null;
+    };
+  }, []);
+
+  async function startMusic() {
+    if (!audioRef.current) return;
+    try {
+      await audioRef.current.play();
+      setMusicOn(true);
+      startedOnceRef.current = true;
+    } catch {
+      // autoplay blocked until user gesture — button click usually fixes it
+      setMusicOn(false);
+    }
+  }
+
+  function stopMusic() {
+    audioRef.current?.pause();
+    setMusicOn(false);
+  }
+
+  function tryStartMusicFromGesture() {
+    // call on first user interaction (typing/click)
+    if (!startedOnceRef.current) startMusic();
+  }
+
+  function handleLogin() {
+    tryStartMusicFromGesture();
+
+    const cleaned = name.trim();
+    if (!cleaned) {
+      setError("Type your name first, cutie 🥺");
+      return;
+    }
+
+    if (cleaned.toLowerCase() !== "natalia") {
+      const msgs = [
+        "Hmm… that doesn’t feel right 😿",
+        "Close… but only one special name works 💘",
+        "Try again, pretty please 🌸",
+        "The universe says: “not yet” 🙈",
+      ];
+      setError(msgs[Math.floor(Math.random() * msgs.length)]);
+      return;
+    }
+
+    setError("");
+    localStorage.setItem("valentine_authed", "yes");
+    localStorage.setItem("valentine_name", cleaned);
+    router.push("/home");
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="loginWrap" onMouseDown={tryStartMusicFromGesture} onTouchStart={tryStartMusicFromGesture}>
+      <HeartConfetti />
+
+      <div className="loginCard">
+        <h1 className="title">
+          Will you be my valentine? <span className="heart">💝</span>
+        </h1>
+
+        <div className="kittyWrap">
+          <Image src="/kitty.png" alt="Cute kitty" width={220} height={220} priority />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="fieldWrap">
+          <label className="label">Enter your name</label>
+          <input
+            className="input"
+            value={name}
+            onFocus={tryStartMusicFromGesture}
+            onChange={(e) => {
+              setName(e.target.value);
+              setError("");
+              tryStartMusicFromGesture();
+            }}
+            placeholder="Type here…"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleLogin();
+            }}
+          />
+
+          <div className="hint">{hint}</div>
+          {error ? <div className="error">{error}</div> : null}
         </div>
-      </main>
-    </div>
+
+        <div className="actions">
+          <button className="btnYes" onClick={handleLogin}>
+            Login 💗
+          </button>
+
+          <button
+            className="btnNo"
+            onClick={() => setError("Nope button is disabled 😼 Try the right name!")}
+            type="button"
+          >
+            Not me &gt;:(
+          </button>
+        </div>
+
+        <div className="musicRow">
+          {!musicOn ? (
+            <button className="musicBtn" onClick={startMusic} type="button">
+              ▶ Play music
+            </button>
+          ) : (
+            <button className="musicBtn" onClick={stopMusic} type="button">
+              ⏸ Pause music
+            </button>
+          )}
+          <span className="musicHint">soft romance mode 🎵</span>
+        </div>
+
+        <div className="footer">From me to you 💕</div>
+      </div>
+    </main>
   );
 }
