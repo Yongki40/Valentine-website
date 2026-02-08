@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
 import HeartConfetti from "../components/HeartConfetti";
 
 export default function LoginPage() {
@@ -10,56 +10,25 @@ export default function LoginPage() {
 
   const [name, setName] = useState("");
   const [error, setError] = useState("");
-  const [musicOn, setMusicOn] = useState(false);
-
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const startedOnceRef = useRef(false);
 
   const hint = useMemo(() => "Hint: starts with “Na” 💗", []);
 
-  useEffect(() => {
-    // Create audio once on client
-    audioRef.current = new Audio("/soft-lofi.mp3");
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0.35;
-
-    return () => {
-      audioRef.current?.pause();
-      audioRef.current = null;
-    };
-  }, []);
-
-  async function startMusic() {
-    if (!audioRef.current) return;
-    try {
-      await audioRef.current.play();
-      setMusicOn(true);
-      startedOnceRef.current = true;
-    } catch {
-      // autoplay blocked until user gesture — button click usually fixes it
-      setMusicOn(false);
-    }
-  }
-
-  function stopMusic() {
-    audioRef.current?.pause();
-    setMusicOn(false);
-  }
-
-  function tryStartMusicFromGesture() {
-    // call on first user interaction (typing/click)
-    if (!startedOnceRef.current) startMusic();
+  function playMusicGlobal() {
+    // Controls the global MusicPlayer mounted in app/layout.tsx
+    window.dispatchEvent(new Event("valentine:play"));
+    localStorage.setItem("music_on", "yes");
   }
 
   function handleLogin() {
-    tryStartMusicFromGesture();
+    // Try to start music on user gesture (allowed by browser)
+    playMusicGlobal();
 
     const cleaned = name.trim();
+
     if (!cleaned) {
       setError("Type your name first, cutie 🥺");
       return;
     }
-
     if (cleaned.toLowerCase() !== "natalia") {
       const msgs = [
         "Hmm… that doesn’t feel right 😿",
@@ -74,11 +43,12 @@ export default function LoginPage() {
     setError("");
     localStorage.setItem("valentine_authed", "yes");
     localStorage.setItem("valentine_name", cleaned);
+
     router.push("/home");
   }
 
   return (
-    <main className="loginWrap" onMouseDown={tryStartMusicFromGesture} onTouchStart={tryStartMusicFromGesture}>
+    <main className="loginWrap">
       <HeartConfetti />
 
       <div className="loginCard">
@@ -87,7 +57,13 @@ export default function LoginPage() {
         </h1>
 
         <div className="kittyWrap">
-          <Image src="/kitty.png" alt="Cute kitty" width={220} height={220} priority />
+          <Image
+            src="/kitty.png"
+            alt="Cute kitty"
+            width={220}
+            height={220}
+            priority
+          />
         </div>
 
         <div className="fieldWrap">
@@ -95,11 +71,10 @@ export default function LoginPage() {
           <input
             className="input"
             value={name}
-            onFocus={tryStartMusicFromGesture}
+            onFocus={playMusicGlobal}
             onChange={(e) => {
               setName(e.target.value);
               setError("");
-              tryStartMusicFromGesture();
             }}
             placeholder="Type here…"
             onKeyDown={(e) => {
@@ -108,6 +83,7 @@ export default function LoginPage() {
           />
 
           <div className="hint">{hint}</div>
+
           {error ? <div className="error">{error}</div> : null}
         </div>
 
@@ -123,19 +99,6 @@ export default function LoginPage() {
           >
             Not me &gt;:(
           </button>
-        </div>
-
-        <div className="musicRow">
-          {!musicOn ? (
-            <button className="musicBtn" onClick={startMusic} type="button">
-              ▶ Play music
-            </button>
-          ) : (
-            <button className="musicBtn" onClick={stopMusic} type="button">
-              ⏸ Pause music
-            </button>
-          )}
-          <span className="musicHint">soft romance mode 🎵</span>
         </div>
 
         <div className="footer">From me to you 💕</div>
