@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const reasons = [
-  "Your smile is literally a mood changer 💗",
+  "You are the perfect combination of sweet and hot 💗🔥",
   "Talking to you feels calm and exciting at once",
   "You’re cute in a way that feels unreal",
   "You make small moments feel special",

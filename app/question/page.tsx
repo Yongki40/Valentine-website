@@ -10,7 +10,7 @@ export default function QuestionPage() {
   const cardRef = useRef<HTMLDivElement>(null);
   const noBtnRef = useRef<HTMLButtonElement>(null);
 
-  const noTexts = ["NO 😭", "WAIT 😨", "HEY 😾", "WHY 😿", "STOP 😵‍💫"];
+  const noTexts = ["JANGAN NATT 😭", "WAIT NAT 😨", "HEY! 😾", "WHY NAT 😿"];
 
   useEffect(() => {
     const ok = localStorage.getItem("valentine_authed") === "yes";
@@ -102,15 +102,42 @@ export default function QuestionPage() {
           <div className="successBox">
             YAYYYY 💞 You just made my day 💗 <br />
             <a
-              href="https://wa.me/628XXXXXXXXXX"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#"
               className="callMeLink"
+              onClick={(e) => {
+                e.preventDefault();
+
+                const phone = "6285785387949"; // <-- replace with your number (no +, no spaces)
+                const userAgent = navigator.userAgent || "";
+                const isAndroid = /Android/i.test(userAgent);
+                const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
+                const isMobile = isAndroid || isIOS;
+
+                const deviceLabel = isAndroid
+                  ? "Android"
+                  : isIOS
+                  ? "iPhone/iPad"
+                  : "Laptop/Desktop";
+
+                // Pre-filled message (customize freely)
+                const text = `Hi 😄 I clicked "now call me" from the Valentine website 💗 (Device: ${deviceLabel})`;
+                const encodedText = encodeURIComponent(text);
+
+                // Different treatment:
+                // - Mobile: wa.me (opens WhatsApp app)
+                // - Desktop: web.whatsapp.com
+                const url = isMobile
+                  ? `https://wa.me/${phone}?text=${encodedText}`
+                  : `https://web.whatsapp.com/send?phone=${phone}&text=${encodedText}`;
+
+                window.open(url, "_blank", "noopener,noreferrer");
+              }}
             >
               now call me 😉
             </a>
           </div>
         )}
+
 
       </div>
     </main>

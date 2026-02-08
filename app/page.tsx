@@ -101,7 +101,7 @@ export default function LoginPage() {
           </button>
         </div>
 
-        <div className="footer">From me to you 💕</div>
+        <div className="footer">From Yongki to you 💕</div>
       </div>
     </main>
   );
